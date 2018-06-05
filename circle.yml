@@ -1,0 +1,15 @@
+general:
+machine:
+  node:
+    version: 6.5.0
+  pre:
+    - export USER_ID=circleci
+    - git config --global user.email "shoaib@actonate.com"
+    - git config --global user.name "Shoaib Merchant"
+  timezone:
+    Asia/Colombo
+test:
+  pre:
+    - npm install
+    - grunt codeLint
+    - grunt styleLint
