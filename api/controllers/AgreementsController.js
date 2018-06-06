@@ -37,7 +37,7 @@ module.exports = {
   },
 
   delete: function(req, res) {
-    AgreementsService.delete(req.body.id)
+    AgreementsService.delete(req.body)
       .then(function(response) {
         res.ok(response);
       })

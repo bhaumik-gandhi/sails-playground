@@ -15,8 +15,12 @@ function AgreementsService() {
   }
 
   function _get(data) {
+
+    console.log(data);
+
     var deferred = q.defer();
     var criteria = {};
+    var sort = "createdAt";
 
     if (data && data.name) {
       if (data.operation === "contains") {
@@ -34,10 +38,10 @@ function AgreementsService() {
 
     if (data && data.value) {
       if (data.operation === "equals") {
-        criteria.value = data.value;
+        criteria.value = parseInt(data.value);
       } else if (data.operation === "not_equals") {
         criteria.value = {
-          "!": data.value
+          "!": parseInt(data.value)
         };
       } else if (data.operation === "gt_equals") {
         criteria.value = {
@@ -52,10 +56,10 @@ function AgreementsService() {
 
     if (data && data.status) {
       if (data.operation === "equals") {
-        criteria.value = data.value;
+        criteria.status = data.status;
       } else if (data.operation === "not_equals") {
-        criteria.value = {
-          "!": data.value
+        criteria.status = {
+          "!": data.status
         };
       }
     }
@@ -87,14 +91,14 @@ function AgreementsService() {
     if (data && data.endDate) {
       var formatedDate = moment(data.endDate).format("DD/MM/YYYY");
       if (data.operation === "equals") {
-        var endDate = moment(data.endDate)
+        var startDate = moment(data.endDate)
           .subtract(1, "days")
           .format("DD/MM/YYYY");
         var endDate = moment(data.endDate)
           .add(1, "days")
           .format("DD/MM/YYYY");
         criteria.endDate = {
-          ">": new Date(endDate),
+          ">": new Date(startDate),
           "<": new Date(endDate)
         };
       } else if (data.operation === "gt_equals") {
@@ -108,7 +112,19 @@ function AgreementsService() {
       }
     }
 
+    if (sort) {
+      sort = sort;
+    }
+    let keys = Object.keys(criteria);
+
+    if (data && data.operation && !keys.length) {
+      criteria = {id: 'null'}
+    }
+
+    console.log(criteria);
+
     Agreements.find(criteria)
+      .sort(sort + " DESC")
       .then(function(res) {
         deferred.resolve(res);
       })
@@ -118,9 +134,9 @@ function AgreementsService() {
     return deferred.promise;
   }
 
-  function _delete(id) {
+  function _delete(ids) {
     var deferred = q.defer();
-    Agreements.destroy({ id: id })
+    Agreements.destroy({ id: ids })
       .then(function(res) {
         deferred.resolve(res);
       })
