@@ -65,52 +65,88 @@ function AgreementsService() {
     }
 
     if (data && data.startDate) {
-      var formatedDate = moment(data.startDate).format("DD/MM/YYYY");
       if (data.operation === "equals") {
-        var startDate = moment(data.startDate)
-          .subtract(1, "days")
-          .format("DD/MM/YYYY");
-        var endDate = moment(data.startDate)
-          .add(1, "days")
-          .format("DD/MM/YYYY");
+        criteria.startDate = data.startDate;
+      } else if (data.operation === "not_equals") {
         criteria.startDate = {
-          ">": new Date(startDate),
-          "<": new Date(endDate)
+          "!": data.startDate
         };
       } else if (data.operation === "gt_equals") {
         criteria.startDate = {
-          ">=": new Date(formatedDate)
+          ">=": data.startDate
         };
       } else if (data.operation === "lt_equals") {
         criteria.startDate = {
-          "<=": new Date(formatedDate)
+          "<=": data.startDate
         };
       }
     }
 
     if (data && data.endDate) {
-      var formatedDate = moment(data.endDate).format("DD/MM/YYYY");
       if (data.operation === "equals") {
-        var startDate = moment(data.endDate)
-          .subtract(1, "days")
-          .format("DD/MM/YYYY");
-        var endDate = moment(data.endDate)
-          .add(1, "days")
-          .format("DD/MM/YYYY");
+        criteria.endDate = data.endDate;
+      } else if (data.operation === "not_equals") {
         criteria.endDate = {
-          ">": new Date(startDate),
-          "<": new Date(endDate)
+          "!": data.endDate
         };
       } else if (data.operation === "gt_equals") {
         criteria.endDate = {
-          ">=": new Date(formatedDate)
+          ">=": data.endDate
         };
       } else if (data.operation === "lt_equals") {
         criteria.endDate = {
-          "<=": new Date(formatedDate)
+          "<=": data.endDate
         };
       }
     }
+
+    // if (data && data.startDate) {
+    //   var formatedDate = moment(data.startDate, 'YYYY-MM-DD HH:mm:ss').toDate();
+    //   if (data.operation === "equals") {
+    //     var startDate = moment(data.startDate, 'YYYY-MM-DD HH:mm:ss')
+    //       .subtract(1, "days")
+    //       .format("DD/MM/YYYY");
+    //     var endDate = moment(data.startDate, 'YYYY-MM-DD HH:mm:ss')
+    //       .add(1, "days")
+    //       .format("DD/MM/YYYY");
+    //     criteria.startDate = {
+    //       ">": new Date(startDate),
+    //       "<": new Date(endDate)
+    //     };
+    //   } else if (data.operation === "gt_equals") {
+    //     criteria.startDate = {
+    //       ">=": formatedDate
+    //     };
+    //   } else if (data.operation === "lt_equals") {
+    //     criteria.startDate = {
+    //       "<=": new Date(formatedDate)
+    //     };
+    //   }
+    // }
+
+    // if (data && data.endDate) {
+    //   var formatedDate = moment(data.endDate, 'YYYY-MM-DD HH:mm:ss').format("DD/MM/YYYY");
+    //   if (data.operation === "equals") {
+    //     var startDate = moment(data.endDate, 'YYYY-MM-DD HH:mm:ss')
+    //       .subtract(1, "days")
+    //       .format("DD/MM/YYYY");
+    //     var endDate = moment(data.endDate, 'YYYY-MM-DD HH:mm:ss')
+    //       .add(1, "days")
+    //       .format("DD/MM/YYYY");
+    //     criteria.endDate = {
+    //       ">": new Date(startDate),
+    //       "<": new Date(endDate)
+    //     };
+    //   } else if (data.operation === "gt_equals") {
+    //     criteria.endDate = {
+    //       ">=": new Date(formatedDate)
+    //     };
+    //   } else if (data.operation === "lt_equals") {
+    //     criteria.endDate = {
+    //       "<=": new Date(formatedDate)
+    //     };
+    //   }
+    // }
 
     if (sort) {
       sort = sort;
