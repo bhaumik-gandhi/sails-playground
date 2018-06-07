@@ -22,140 +22,101 @@ function AgreementsService() {
     var criteria = {};
     var sort = "createdAt";
 
-    if (data && data.name) {
-      if (data.operation === "contains") {
-        criteria.name = {
-          like: "%" + data.name + "%"
-        };
-      } else if (data.operation === "equals") {
-        criteria.name = data.name;
-      } else if (data.operation === "not_equals") {
-        criteria.name = {
-          "!": data.name
-        };
-      }
+    if (data && data.constructor === Array) {
+      data.forEach(function(filter) {
+        if (filter && filter.name) {
+          if (filter.operation === "contains") {
+            criteria.name = {
+              like: "%" + filter.name + "%"
+            };
+          } else if (filter.operation === "equals") {
+            criteria.name = filter.name;
+          } else if (filter.operation === "not_equals") {
+            criteria.name = {
+              "!": filter.name
+            };
+          }
+        }
+
+        if (filter && filter.value) {
+          if (filter.operation === "equals") {
+            criteria.value = parseInt(filter.value);
+          } else if (filter.operation === "not_equals") {
+            criteria.value = {
+              "!": parseInt(filter.value)
+            };
+          } else if (filter.operation === "gt_equals") {
+            criteria.value = {
+              ">=": parseInt(filter.value)
+            };
+          } else if (filter.operation === "lt_equals") {
+            criteria.value = {
+              "<=": parseInt(filter.value)
+            };
+          }
+        }
+
+        if (filter && filter.status) {
+          if (filter.operation === "equals") {
+            criteria.status = filter.status;
+          } else if (filter.operation === "not_equals") {
+            criteria.status = {
+              "!": filter.status
+            };
+          }
+        }
+
+        if (filter && filter.startDate) {
+          if (filter.operation === "equals") {
+            criteria.startDate = filter.startDate;
+          } else if (filter.operation === "not_equals") {
+            criteria.startDate = {
+              "!": filter.startDate
+            };
+          } else if (filter.operation === "gt_equals") {
+            criteria.startDate = {
+              ">=": filter.startDate
+            };
+          } else if (filter.operation === "lt_equals") {
+            criteria.startDate = {
+              "<=": filter.startDate
+            };
+          }
+        }
+
+        if (filter && filter.endDate) {
+          if (filter.operation === "equals") {
+            criteria.endDate = filter.endDate;
+          } else if (filter.operation === "not_equals") {
+            criteria.endDate = {
+              "!": filter.endDate
+            };
+          } else if (filter.operation === "gt_equals") {
+            criteria.endDate = {
+              ">=": filter.endDate
+            };
+          } else if (filter.operation === "lt_equals") {
+            criteria.endDate = {
+              "<=": filter.endDate
+            };
+          }
+        }
+      })
     }
 
-    if (data && data.value) {
-      if (data.operation === "equals") {
-        criteria.value = parseInt(data.value);
-      } else if (data.operation === "not_equals") {
-        criteria.value = {
-          "!": parseInt(data.value)
-        };
-      } else if (data.operation === "gt_equals") {
-        criteria.value = {
-          ">=": parseInt(data.value)
-        };
-      } else if (data.operation === "lt_equals") {
-        criteria.value = {
-          "<=": parseInt(data.value)
-        };
-      }
+    if (data && data.id) {
+      criteria.id = data.id;
     }
 
-    if (data && data.status) {
-      if (data.operation === "equals") {
-        criteria.status = data.status;
-      } else if (data.operation === "not_equals") {
-        criteria.status = {
-          "!": data.status
-        };
-      }
-    }
-
-    if (data && data.startDate) {
-      if (data.operation === "equals") {
-        criteria.startDate = data.startDate;
-      } else if (data.operation === "not_equals") {
-        criteria.startDate = {
-          "!": data.startDate
-        };
-      } else if (data.operation === "gt_equals") {
-        criteria.startDate = {
-          ">=": data.startDate
-        };
-      } else if (data.operation === "lt_equals") {
-        criteria.startDate = {
-          "<=": data.startDate
-        };
-      }
-    }
-
-    if (data && data.endDate) {
-      if (data.operation === "equals") {
-        criteria.endDate = data.endDate;
-      } else if (data.operation === "not_equals") {
-        criteria.endDate = {
-          "!": data.endDate
-        };
-      } else if (data.operation === "gt_equals") {
-        criteria.endDate = {
-          ">=": data.endDate
-        };
-      } else if (data.operation === "lt_equals") {
-        criteria.endDate = {
-          "<=": data.endDate
-        };
-      }
-    }
-
-    // if (data && data.startDate) {
-    //   var formatedDate = moment(data.startDate, 'YYYY-MM-DD HH:mm:ss').toDate();
-    //   if (data.operation === "equals") {
-    //     var startDate = moment(data.startDate, 'YYYY-MM-DD HH:mm:ss')
-    //       .subtract(1, "days")
-    //       .format("DD/MM/YYYY");
-    //     var endDate = moment(data.startDate, 'YYYY-MM-DD HH:mm:ss')
-    //       .add(1, "days")
-    //       .format("DD/MM/YYYY");
-    //     criteria.startDate = {
-    //       ">": new Date(startDate),
-    //       "<": new Date(endDate)
-    //     };
-    //   } else if (data.operation === "gt_equals") {
-    //     criteria.startDate = {
-    //       ">=": formatedDate
-    //     };
-    //   } else if (data.operation === "lt_equals") {
-    //     criteria.startDate = {
-    //       "<=": new Date(formatedDate)
-    //     };
-    //   }
-    // }
-
-    // if (data && data.endDate) {
-    //   var formatedDate = moment(data.endDate, 'YYYY-MM-DD HH:mm:ss').format("DD/MM/YYYY");
-    //   if (data.operation === "equals") {
-    //     var startDate = moment(data.endDate, 'YYYY-MM-DD HH:mm:ss')
-    //       .subtract(1, "days")
-    //       .format("DD/MM/YYYY");
-    //     var endDate = moment(data.endDate, 'YYYY-MM-DD HH:mm:ss')
-    //       .add(1, "days")
-    //       .format("DD/MM/YYYY");
-    //     criteria.endDate = {
-    //       ">": new Date(startDate),
-    //       "<": new Date(endDate)
-    //     };
-    //   } else if (data.operation === "gt_equals") {
-    //     criteria.endDate = {
-    //       ">=": new Date(formatedDate)
-    //     };
-    //   } else if (data.operation === "lt_equals") {
-    //     criteria.endDate = {
-    //       "<=": new Date(formatedDate)
-    //     };
-    //   }
-    // }
 
     if (sort) {
       sort = sort;
     }
-    let keys = Object.keys(criteria);
+    // let keys = Object.keys(criteria);
 
-    if (data && data.operation && !keys.length) {
-      criteria = {id: 'null'}
-    }
+    // if (data && data.operation && !keys.length) {
+    //   criteria = {id: 'null'}
+    // }
 
     console.log(criteria);
 
